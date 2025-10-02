@@ -131,7 +131,7 @@
 
       const order = cart.join(", ");
 
-      fetch("YOUR_WEB_APP_URL", {  // 👈 Replace with your deployed Apps Script URL
+      fetch("https://script.google.com/macros/s/AKfycbwkgcXJHlrTAN5UqqQEsEve0ZJ0H3PMbGrPBMXPS83s_vYKwH07cry2Ms3Bi4uWcQEJ/exec", {  // 👈 Replace with your deployed Apps Script URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, order })
