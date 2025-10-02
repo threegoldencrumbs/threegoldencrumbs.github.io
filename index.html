@@ -115,45 +115,36 @@
 
     // Checkout functionality
     document.getElementById("checkout").addEventListener("click", () => {
-      if(cart.length === 0){ alert("Your cart is empty!"); return; }
+  if(cart.length === 0){ alert("Your cart is empty!"); return; }
 
-      const name = prompt("Enter your name:");
-      const email = prompt("Enter your email:");
-      if(!name || !email){ alert("Name and email are required."); return; }
+  const name = prompt("Enter your name:");
+  const email = prompt("Enter your email:");
+  if(!name || !email){ alert("Name and email are required."); return; }
 
-      const order = cart.join(", ");
+  const order = cart.join(", ");
 
-      fetch("https://script.google.com/macros/s/AKfycbzw71nKtBo6evAi5r9BQrpZwkbH1Hw1wFVtlJyMtKE04j8k8HUI4zPClGzJ4cm7qSG5/exec", {  // <-- Replace with your Apps Script Web App URL
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, order })
-      })
-      .then(res => res.text()) // Use text for debugging
-      .then(text => {
-        console.log("Raw response:", text); // Debug log
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch(err) {
-          console.error("JSON parse error:", err);
-          alert("❌ Unexpected response from server. Check console.");
-          return;
-        }
-
-        if(data.result === "success"){
-          alert("✅ Thank you! Your order has been placed.");
-          cart.length = 0;
-          updateCart();
-          cartModal.style.display = "none";
-        } else {
-          alert("❌ Error: " + data.message);
-        }
-      })
-      .catch(err => {
-        console.error("Fetch error object:", err);
-        alert("❌ Error sending order. Check console.");
-      });
-    });
+  fetch("https://script.google.com/macros/s/AKfycbyfjID_aWKKSrf_yKzvrYpGDFSSGlhbgsLD4VcYpYEb3u8eq_4ukNaC8j-mTFGB02v1/exec", { // Replace with your Apps Script /exec URL
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, order })
+  })
+  .then(res => res.json()) // Safe JSON parsing
+  .then(data => {
+    if(data.result === "success"){
+      alert("✅ Order placed successfully!");
+      cart.length = 0;
+      updateCart();
+      cartModal.style.display = "none";
+    } else {
+      alert("❌ Error: " + data.message);
+      console.error("Server response error:", data);
+    }
+  })
+  .catch(err => {
+    console.error("Fetch error:", err);
+    alert("❌ Error sending order. Check console for details.");
+  });
+});
   </script>
 </body>
 </html>
