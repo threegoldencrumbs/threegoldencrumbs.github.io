@@ -63,11 +63,13 @@
     <p>Follow us on Instagram: <a href="#">@threegoldencrumbs</a></p>
   </section>
 
+  <!-- Floating cart bar -->
   <div class="cart-bar" id="cart-bar">
     🛒 <span id="cart-count">0</span> items | 
     <button id="view-cart">View Cart</button>
   </div>
 
+  <!-- Cart modal -->
   <div class="cart-modal" id="cart-modal">
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
@@ -85,6 +87,7 @@
     const cartItemsList = document.getElementById("cart-items");
     const cartModal = document.getElementById("cart-modal");
 
+    // Add to cart functionality
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", () => {
         cart.push(button.getAttribute("data-flavor"));
@@ -102,6 +105,7 @@
       });
     }
 
+    // Cart modal controls
     document.getElementById("view-cart").addEventListener("click", () => {
       cartModal.style.display = "block";
     });
@@ -109,6 +113,7 @@
       cartModal.style.display = "none";
     });
 
+    // Checkout functionality
     document.getElementById("checkout").addEventListener("click", () => {
       if(cart.length === 0){ alert("Your cart is empty!"); return; }
 
@@ -118,32 +123,34 @@
 
       const order = cart.join(", ");
 
-      // Production fetch + debug logging
-      fetch("https://script.google.com/macros/s/AKfycbzWYZ5RFNphjYjhybHEsJUCPs04k3drkviF1oXyKJSymd9q8X-LYKlOgjl6TyAxYwIj/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzw71nKtBo6evAi5r9BQrpZwkbH1Hw1wFVtlJyMtKE04j8k8HUI4zPClGzJ4cm7qSG5/exec", {  // <-- Replace with your Apps Script Web App URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, order })
       })
-      .then(res => res.text()) // use text first to debug
+      .then(res => res.text()) // Use text for debugging
       .then(text => {
-        console.log("Raw response from Apps Script:", text);
+        console.log("Raw response:", text); // Debug log
+        let data;
         try {
-          const data = JSON.parse(text);
-          if(data.result === "success"){
-            alert("✅ Thank you! Your order has been placed.");
-            cart.length = 0;
-            updateCart();
-            cartModal.style.display = "none";
-          } else {
-            alert("❌ Error sending order: " + data.message);
-          }
+          data = JSON.parse(text);
         } catch(err) {
-          console.error("Error parsing JSON:", err);
+          console.error("JSON parse error:", err);
           alert("❌ Unexpected response from server. Check console.");
+          return;
+        }
+
+        if(data.result === "success"){
+          alert("✅ Thank you! Your order has been placed.");
+          cart.length = 0;
+          updateCart();
+          cartModal.style.display = "none";
+        } else {
+          alert("❌ Error: " + data.message);
         }
       })
       .catch(err => {
-        console.error("Fetch error:", err);
+        console.error("Fetch error object:", err);
         alert("❌ Error sending order. Check console.");
       });
     });
