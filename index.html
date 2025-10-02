@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
   <header>
     <div class="logo">🍪 Three Golden Crumbs</div>
     <nav>
@@ -19,14 +18,12 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <h1>Freshly Baked, Always Golden</h1>
     <p>Handcrafted cookies made with love and the finest ingredients.</p>
     <a href="#menu" class="btn">See Our Menu</a>
   </section>
 
-  <!-- About Section -->
   <section id="about" class="about">
     <h2>Our Story</h2>
     <p>
@@ -36,7 +33,6 @@
     </p>
   </section>
 
-  <!-- Menu Section -->
   <section id="menu" class="menu">
     <h2>Our Cookies</h2>
     <div class="menu-grid">
@@ -61,20 +57,17 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
   <section id="contact" class="contact">
     <h2>Get in Touch</h2>
     <p>Email us at <a href="mailto:info@threegoldencrumbs.com">info@threegoldencrumbs.com</a></p>
     <p>Follow us on Instagram: <a href="#">@threegoldencrumbs</a></p>
   </section>
 
-  <!-- Floating Cart Bar -->
   <div class="cart-bar" id="cart-bar">
     🛒 <span id="cart-count">0</span> items | 
     <button id="view-cart">View Cart</button>
   </div>
 
-  <!-- Hidden Cart Modal -->
   <div class="cart-modal" id="cart-modal">
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
@@ -82,23 +75,19 @@
     <button id="close-cart">Close</button>
   </div>
 
-  <!-- Footer -->
   <footer>
     <p>© 2025 Three Golden Crumbs. All rights reserved.</p>
   </footer>
 
-  <!-- Cart Script -->
   <script>
     const cart = [];
     const cartCount = document.getElementById("cart-count");
     const cartItemsList = document.getElementById("cart-items");
     const cartModal = document.getElementById("cart-modal");
 
-    // Add to Cart
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", () => {
-        const flavor = button.getAttribute("data-flavor");
-        cart.push(flavor);
+        cart.push(button.getAttribute("data-flavor"));
         updateCart();
       });
     });
@@ -113,7 +102,6 @@
       });
     }
 
-    // Show / hide cart
     document.getElementById("view-cart").addEventListener("click", () => {
       cartModal.style.display = "block";
     });
@@ -121,24 +109,23 @@
       cartModal.style.display = "none";
     });
 
-    // Checkout -> Google Sheets + T-Mobile SMS
     document.getElementById("checkout").addEventListener("click", () => {
-      if (cart.length === 0) { alert("Your cart is empty!"); return; }
+      if(cart.length === 0){ alert("Your cart is empty!"); return; }
 
       const name = prompt("Enter your name:");
       const email = prompt("Enter your email:");
-      if (!name || !email) { alert("Name and email are required."); return; }
+      if(!name || !email){ alert("Name and email are required."); return; }
 
       const order = cart.join(", ");
 
-      fetch("https://script.google.com/macros/s/AKfycbwm5UT-FH3KgI8Tt-FkF_3kh_0kzxIIxHmwzt2icciCSiXpN94HoAZPPd3HDKDKe68b/exec", { 
+      fetch("https://script.google.com/macros/s/AKfycbwY47oyw9YVrial4Az64XJ6PysB8XVoVLXSvymCIa0GckYV2Q7Jjqw2TH_7mbCY3-Ng/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, order })
       })
       .then(res => res.json())
       .then(data => {
-        if(data.result === "success") {
+        if(data.result === "success"){
           alert("✅ Thank you! Your order has been placed.");
           cart.length = 0;
           updateCart();
