@@ -65,6 +65,36 @@
     <p>Follow us on Instagram: <a href="#">@threegoldencrumbs</a></p>
   </section>
 
+  <!-- Order Form Section -->
+<section id="order" class="order">
+  <h2>Place an Order</h2>
+  <form action="mailto:info@threegoldencrumbs.com" method="post" enctype="text/plain">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="flavor">Choose a Flavor:</label>
+    <select id="flavor" name="flavor" required>
+      <option value="">--Select a Cookie--</option>
+      <option value="chocolate-chip">Chocolate Chip</option>
+      <option value="red-velvet">Red Velvet</option>
+      <option value="smores">S’mores</option>
+      <option value="birthday-cake">Birthday Cake</option>
+      <option value="double-chocolate">Double Chocolate</option>
+    </select>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" min="1" required>
+
+    <label for="message">Special Requests:</label>
+    <textarea id="message" name="message" rows="4"></textarea>
+
+    <button type="submit" class="btn">Submit Order</button>
+  </form>
+</section>
+
   <!-- Footer -->
   <footer>
     <p>© 2025 Three Golden Crumbs. All rights reserved.</p>
