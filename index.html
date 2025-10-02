@@ -123,9 +123,38 @@
       cartModal.style.display = "none";
     });
 
-    // Checkout (currently just an alert)
+    // Checkout -> Send to Google Sheets
     document.getElementById("checkout").addEventListener("click", () => {
-      alert("Please fill out the order form to complete checkout!");
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      const name = prompt("Enter your name:");
+      const email = prompt("Enter your email:");
+
+      if (!name || !email) {
+        alert("Name and email are required.");
+        return;
+      }
+
+      const order = cart.join(", ");
+
+      fetch("YOUR_WEB_APP_URL", {
+        method: "POST",
+        body: JSON.stringify({ name, email, order })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("✅ Thank you! Your order has been placed.");
+        cart.length = 0; // clear cart
+        updateCart();
+        cartModal.style.display = "none";
+      })
+      .catch(err => {
+        alert("❌ Error sending order. Please try again.");
+        console.error(err);
+      });
     });
   </script>
 </body>
