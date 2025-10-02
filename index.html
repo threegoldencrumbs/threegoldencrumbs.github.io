@@ -135,8 +135,8 @@
         }
       })
       .catch(err => {
+        console.error("Fetch error:", err);
         alert("❌ Error sending order. Check console.");
-        console.error(err);
       });
     });
   </script>
