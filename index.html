@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Header -->
   <header>
     <div class="logo">🍪 Three Golden Crumbs</div>
     <nav>
@@ -18,12 +19,14 @@
     </nav>
   </header>
 
+  <!-- Hero Section -->
   <section class="hero">
     <h1>Freshly Baked, Always Golden</h1>
     <p>Handcrafted cookies made with love and the finest ingredients.</p>
     <a href="#menu" class="btn">See Our Menu</a>
   </section>
 
+  <!-- About Section -->
   <section id="about" class="about">
     <h2>Our Story</h2>
     <p>
@@ -33,6 +36,7 @@
     </p>
   </section>
 
+  <!-- Menu Section -->
   <section id="menu" class="menu">
     <h2>Our Cookies</h2>
     <div class="menu-grid">
@@ -57,19 +61,20 @@
     </div>
   </section>
 
+  <!-- Contact Section -->
   <section id="contact" class="contact">
     <h2>Get in Touch</h2>
     <p>Email us at <a href="mailto:info@threegoldencrumbs.com">info@threegoldencrumbs.com</a></p>
     <p>Follow us on Instagram: <a href="#">@threegoldencrumbs</a></p>
   </section>
 
-  <!-- Floating cart bar -->
+  <!-- Floating Cart Bar -->
   <div class="cart-bar" id="cart-bar">
     🛒 <span id="cart-count">0</span> items | 
     <button id="view-cart">View Cart</button>
   </div>
 
-  <!-- Cart modal -->
+  <!-- Hidden Cart Modal -->
   <div class="cart-modal" id="cart-modal">
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
@@ -77,24 +82,28 @@
     <button id="close-cart">Close</button>
   </div>
 
+  <!-- Footer -->
   <footer>
     <p>© 2025 Three Golden Crumbs. All rights reserved.</p>
   </footer>
 
+  <!-- Cart Script -->
   <script>
     const cart = [];
     const cartCount = document.getElementById("cart-count");
     const cartItemsList = document.getElementById("cart-items");
     const cartModal = document.getElementById("cart-modal");
 
-    // Add to cart functionality
+    // Add to Cart buttons
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", () => {
-        cart.push(button.getAttribute("data-flavor"));
+        const flavor = button.getAttribute("data-flavor");
+        cart.push(flavor);
         updateCart();
       });
     });
 
+    // Update cart UI
     function updateCart() {
       cartCount.textContent = cart.length;
       cartItemsList.innerHTML = "";
@@ -105,46 +114,48 @@
       });
     }
 
-    // Cart modal controls
+    // Show / hide cart modal
     document.getElementById("view-cart").addEventListener("click", () => {
       cartModal.style.display = "block";
     });
+
     document.getElementById("close-cart").addEventListener("click", () => {
       cartModal.style.display = "none";
     });
 
-    // Checkout functionality
+    // Checkout -> Send to Google Sheets
     document.getElementById("checkout").addEventListener("click", () => {
-  if(cart.length === 0){ alert("Your cart is empty!"); return; }
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
 
-  const name = prompt("Enter your name:");
-  const email = prompt("Enter your email:");
-  if(!name || !email){ alert("Name and email are required."); return; }
+      const name = prompt("Enter your name:");
+      const email = prompt("Enter your email:");
 
-  const order = cart.join(", ");
+      if (!name || !email) {
+        alert("Name and email are required.");
+        return;
+      }
 
-  fetch("https://script.google.com/macros/s/AKfycbwb7SF8rAAOSQjgATIk3DUyst11xdMzymGAEsZdXe5p4LTpE8FskMATFSg4U0vb27GL/exec", { // Replace with your Apps Script /exec URL
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, order })
-  })
-  .then(res => res.json()) // Safe JSON parsing
-  .then(data => {
-    if(data.result === "success"){
-      alert("✅ Order placed successfully!");
-      cart.length = 0;
-      updateCart();
-      cartModal.style.display = "none";
-    } else {
-      alert("❌ Error: " + data.message);
-      console.error("Server response error:", data);
-    }
-  })
-  .catch(err => {
-    console.error("Fetch error:", err);
-    alert("❌ Error sending order. Check console for details.");
-  });
-});
+      const order = cart.join(", ");
+
+      fetch("YOUR_WEB_APP_URL", {
+        method: "POST",
+        body: JSON.stringify({ name, email, order })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("✅ Thank you! Your order has been placed.");
+        cart.length = 0; // clear cart
+        updateCart();
+        cartModal.style.display = "none";
+      })
+      .catch(err => {
+        alert("❌ Error sending order. Please try again.");
+        console.error(err);
+      });
+    });
   </script>
 </body>
 </html>
