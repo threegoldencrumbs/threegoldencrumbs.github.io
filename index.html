@@ -118,20 +118,28 @@
 
       const order = cart.join(", ");
 
-      fetch("https://script.google.com/macros/s/AKfycbxBG0vMGPiKazxAqop7XyZ8NLwiezsadvLyVk0uS68hwoYqetyQq5sVL7rse5ot2OsX/exec", {
+      // Production fetch + debug logging
+      fetch("YOUR_WEB_APP_URL", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, order })
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.result === "success"){
-          alert("✅ Thank you! Your order has been placed.");
-          cart.length = 0;
-          updateCart();
-          cartModal.style.display = "none";
-        } else {
-          alert("❌ Error sending order: " + data.message);
+      .then(res => res.text()) // use text first to debug
+      .then(text => {
+        console.log("Raw response from Apps Script:", text);
+        try {
+          const data = JSON.parse(text);
+          if(data.result === "success"){
+            alert("✅ Thank you! Your order has been placed.");
+            cart.length = 0;
+            updateCart();
+            cartModal.style.display = "none";
+          } else {
+            alert("❌ Error sending order: " + data.message);
+          }
+        } catch(err) {
+          console.error("Error parsing JSON:", err);
+          alert("❌ Unexpected response from server. Check console.");
         }
       })
       .catch(err => {
