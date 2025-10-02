@@ -119,7 +119,7 @@
       const order = cart.join(", ");
 
       // Production fetch + debug logging
-      fetch("YOUR_WEB_APP_URL", {
+      fetch("https://script.google.com/macros/s/AKfycbzWYZ5RFNphjYjhybHEsJUCPs04k3drkviF1oXyKJSymd9q8X-LYKlOgjl6TyAxYwIj/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, order })
