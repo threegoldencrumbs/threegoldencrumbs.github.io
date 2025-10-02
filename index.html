@@ -140,7 +140,7 @@
 
       const order = cart.join(", ");
 
-      fetch("https://script.google.com/macros/s/AKfycbwI4nUngMQKojw47oIENaNuR3v4QA9sFFiVpRk729s80AdcCG6b6jUL8Pcyt3Gpnv2O/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbyqxP4FUInyBEsWCYz71reRRBpzarMsCI0kHA0eD5j3wbNyUpAQRGgW8SWEE3Dv3E4/exec", {
         method: "POST",
                 headers: { "Content-Type": "application/json" },body: JSON.stringify({ name, email, order })
       })
