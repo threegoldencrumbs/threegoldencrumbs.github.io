@@ -44,16 +44,19 @@
         <img src="images/chocolate-chip.jpg" alt="Chocolate Chip Cookie">
         <h3>Chocolate Chip</h3>
         <p>Classic and gooey, the all-time favorite.</p>
+        <button class="add-to-cart" data-flavor="Chocolate Chip">Add to Cart</button>
       </div>
       <div class="card">
         <img src="images/red-velvet.jpg" alt="Red Velvet Cookie">
         <h3>Red Velvet</h3>
         <p>A soft delight with cream cheese flavor notes.</p>
+        <button class="add-to-cart" data-flavor="Red Velvet">Add to Cart</button>
       </div>
       <div class="card">
         <img src="images/smores.jpg" alt="S’mores Cookie">
         <h3>S’mores</h3>
         <p>Chocolate, marshmallow, and graham cracker magic.</p>
+        <button class="add-to-cart" data-flavor="S’mores">Add to Cart</button>
       </div>
     </div>
   </section>
@@ -65,39 +68,65 @@
     <p>Follow us on Instagram: <a href="#">@threegoldencrumbs</a></p>
   </section>
 
-  <!-- Order Form Section -->
-<section id="order" class="order">
-  <h2>Place an Order</h2>
-  <form action="mailto:info@threegoldencrumbs.com" method="post" enctype="text/plain">
-    <label for="name">Your Name:</label>
-    <input type="text" id="name" name="name" required>
+  <!-- Floating Cart Bar -->
+  <div class="cart-bar" id="cart-bar">
+    🛒 <span id="cart-count">0</span> items | 
+    <button id="view-cart">View Cart</button>
+  </div>
 
-    <label for="email">Your Email:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="flavor">Choose a Flavor:</label>
-    <select id="flavor" name="flavor" required>
-      <option value="">--Select a Cookie--</option>
-      <option value="chocolate-chip">Chocolate Chip</option>
-      <option value="red-velvet">Red Velvet</option>
-      <option value="smores">S’mores</option>
-      <option value="birthday-cake">Birthday Cake</option>
-      <option value="double-chocolate">Double Chocolate</option>
-    </select>
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" min="1" required>
-
-    <label for="message">Special Requests:</label>
-    <textarea id="message" name="message" rows="4"></textarea>
-
-    <button type="submit" class="btn">Submit Order</button>
-  </form>
-</section>
+  <!-- Hidden Cart Modal -->
+  <div class="cart-modal" id="cart-modal">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <button id="checkout">Checkout</button>
+    <button id="close-cart">Close</button>
+  </div>
 
   <!-- Footer -->
   <footer>
     <p>© 2025 Three Golden Crumbs. All rights reserved.</p>
   </footer>
+
+  <!-- Cart Script -->
+  <script>
+    const cart = [];
+    const cartCount = document.getElementById("cart-count");
+    const cartItemsList = document.getElementById("cart-items");
+    const cartModal = document.getElementById("cart-modal");
+
+    // Add to Cart buttons
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+      button.addEventListener("click", () => {
+        const flavor = button.getAttribute("data-flavor");
+        cart.push(flavor);
+        updateCart();
+      });
+    });
+
+    // Update cart UI
+    function updateCart() {
+      cartCount.textContent = cart.length;
+      cartItemsList.innerHTML = "";
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        cartItemsList.appendChild(li);
+      });
+    }
+
+    // Show / hide cart modal
+    document.getElementById("view-cart").addEventListener("click", () => {
+      cartModal.style.display = "block";
+    });
+
+    document.getElementById("close-cart").addEventListener("click", () => {
+      cartModal.style.display = "none";
+    });
+
+    // Checkout (currently just an alert)
+    document.getElementById("checkout").addEventListener("click", () => {
+      alert("Please fill out the order form to complete checkout!");
+    });
+  </script>
 </body>
 </html>
