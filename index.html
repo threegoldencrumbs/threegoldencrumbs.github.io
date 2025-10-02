@@ -142,6 +142,9 @@
 
       fetch("https://script.google.com/macros/s/AKfycbzNgHHYgHZd_La1xF7G-Z52_v-h77bjFMB4_GNa07QjokpHqi3lgLZXFstrkhsnKhhf/exec", {
         method: "POST",
+        headers: {
+    "Content-Type": "application/json"
+  },
         body: JSON.stringify({ name, email, order })
       })
       .then(res => res.json())
