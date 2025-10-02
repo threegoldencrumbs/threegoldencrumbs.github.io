@@ -94,7 +94,7 @@
     const cartItemsList = document.getElementById("cart-items");
     const cartModal = document.getElementById("cart-modal");
 
-    // Add to Cart buttons
+    // Add to Cart
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", () => {
         const flavor = button.getAttribute("data-flavor");
@@ -103,7 +103,6 @@
       });
     });
 
-    // Update cart UI
     function updateCart() {
       cartCount.textContent = cart.length;
       cartItemsList.innerHTML = "";
@@ -114,46 +113,42 @@
       });
     }
 
-    // Show / hide cart modal
+    // Show / hide cart
     document.getElementById("view-cart").addEventListener("click", () => {
       cartModal.style.display = "block";
     });
-
     document.getElementById("close-cart").addEventListener("click", () => {
       cartModal.style.display = "none";
     });
 
-    // Checkout -> send to Google Sheets + T-Mobile SMS
+    // Checkout -> Google Sheets + T-Mobile SMS
     document.getElementById("checkout").addEventListener("click", () => {
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
+      if (cart.length === 0) { alert("Your cart is empty!"); return; }
 
       const name = prompt("Enter your name:");
       const email = prompt("Enter your email:");
-
-      if (!name || !email) {
-        alert("Name and email are required.");
-        return;
-      }
+      if (!name || !email) { alert("Name and email are required."); return; }
 
       const order = cart.join(", ");
 
-      fetch("https://script.google.com/macros/s/AKfycbxg2MkjHPM3v84v0C6wgPnacYiqbi4O9uXR-CMr7Qe_dCZbUHqPMVViReMVf9mv_7Q/exec", {
+      fetch("YOUR_WEB_APP_URL", {  // 👈 Replace with your deployed Apps Script URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, order })
       })
       .then(res => res.json())
       .then(data => {
-        alert("✅ Thank you! Your order has been placed.");
-        cart.length = 0; // clear cart
-        updateCart();
-        cartModal.style.display = "none";
+        if(data.result === "success") {
+          alert("✅ Thank you! Your order has been placed.");
+          cart.length = 0;
+          updateCart();
+          cartModal.style.display = "none";
+        } else {
+          alert("❌ Error sending order: " + data.message);
+        }
       })
       .catch(err => {
-        alert("❌ Error sending order. Please try again.");
+        alert("❌ Error sending order. Check console.");
         console.error(err);
       });
     });
